@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0B0F19;--bg2:#030712;--ink:#EAEEFB;--mute:#94A1BE;--blue:#5B8CFF;--violet:#9B6BFF;--cyan:#38E1D0;--line:rgba(255,255,255,.09);--glass:rgba(16,22,40,.55);--hf:"Space Grotesk","Segoe UI",system-ui,sans-serif;--bf:"Plus Jakarta Sans",Inter,"Segoe UI",system-ui,sans-serif;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--bg:#0B0F19;--bg2:#030712;--ink:#EAEEFB;--mute:#94A1BE;--blue:#5B8CFF;--violet:#6bb0ff;--cyan:#38E1D0;--line:rgba(255,255,255,.09);--glass:rgba(16,22,40,.55);--hf:"Space Grotesk","Segoe UI",system-ui,sans-serif;--bf:"Plus Jakarta Sans",Inter,"Segoe UI",system-ui,sans-serif;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-behavior:smooth;scroll-snap-type:y proximity;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed;color:var(--ink);font:400 16px/1.65 var(--bf);overflow-x:hidden}
@@ -168,7 +168,6 @@ const P=[
 {t:"Юридическое сопровождение проекта",d:"Договоры с заказчиками и подрядчиками, защита интеллектуальной собственности, персональные данные. Опыт в IT, EdTech и FinTech.",g:["Договоры","Интеллектуальная собственность","Персональные данные"],h:250,i:`<path d="M12 4v16M8 20h8M4 7h16"/><path d="M4 7l-2.5 6a3.5 3.5 0 0 0 5 0zM20 7l-2.5 6a3.5 3.5 0 0 0 5 0z"/>`}
 ];
 
-/* portraits: заглушка или фото */
 const portrait=(h,k)=>`<svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Portrait placeholder"><defs><linearGradient id="g${k}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${h} 85% 58%)"/><stop offset="1" stop-color="hsl(${h+70} 70% 16%)"/></linearGradient><radialGradient id="r${k}" cx=".5" cy=".38"><stop offset="0" stop-color="#fff" stop-opacity=".4"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="300" height="400" fill="url(#g${k})"/><circle cx="150" cy="150" r="150" fill="url(#r${k})"/><path d="M30 400c0-96 52-136 120-136s120 40 120 136z" fill="#0B0F19" opacity=".88"/><rect x="130" y="222" width="40" height="50" rx="14" fill="#0B0F19" opacity=".9"/><ellipse cx="150" cy="170" rx="54" ry="66" fill="#0B0F19" opacity=".92"/><path d="M0 330 300 250M0 370 300 290" stroke="#fff" stroke-opacity=".12"/></svg>`;
 const yw=n=>{const a=n%100,b=n%10;return a>10&&a<15?"лет":b===1?"год":b>1&&b<5?"года":"лет"};
 const tm=$("#team");
@@ -181,43 +180,39 @@ return `<article class="slide" id="m${i}"><div class="wrap sg">
 ${main+it}
 <div class="stats">${p.m.map(s=>`<div><b>${s[0]}</b><span>${s[1]}</span></div>`).join("")}</div></div></div></article>`}).join("");
 
-/* possible projects */
 $("#pg").innerHTML=P.map(p=>`<article class="pj glass tilt rv"><div class="info"><div class="ic" style="--a:${p.h};--b:${p.h+70}"><svg viewBox="0 0 24 24" aria-hidden="true">${p.i}</svg></div><h3>${p.t}</h3><p>${p.d}</p><div class="tags" style="margin:auto 0 0">${p.g.map(x=>`<span>${x}</span>`).join("")}</div></div></article>`).join("");
 
-/* tilt (fine pointers only) */
 if(matchMedia('(hover:hover)').matches)$$('.tilt').forEach(el=>{
 el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;el.style.setProperty('--ry',((x-.5)*8).toFixed(2)+'deg');el.style.setProperty('--rx',((.5-y)*8).toFixed(2)+'deg');el.style.setProperty('--mx',x*100+'%');el.style.setProperty('--my',y*100+'%')});
 el.addEventListener('pointerleave',()=>{el.style.setProperty('--rx','0deg');el.style.setProperty('--ry','0deg')})});
 
-/* reveals + team dots */
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
 $$('.rv').forEach(e=>io.observe(e));
 const dots=$("#dots");dots.innerHTML=T.map((p,i)=>`<a href="#m${i}" aria-label="${p.n}"></a>`).join("");
 const vis=new Set(),dio=new IntersectionObserver(es=>{es.forEach(e=>{const i=+e.target.id.slice(1);e.isIntersecting?vis.add(i):vis.delete(i)});const a=[...vis][0];dots.classList.toggle('on',vis.size>0);$$('a',dots).forEach((d,i)=>d.classList.toggle('on',i===a))},{threshold:.55});
 $$('.slide').forEach(s=>dio.observe(s));
 
-
-/* Глубокие шестиугольные колонны сот: сами ячейки не светятся, холодный свет пробивается снизу сквозь зазоры между колоннами (ширина зазоров сохранена) */
+/* Плавное глубинное свечение под шестиугольными колоннами */
 (()=>{const c=$("#grid"),g=c.getContext("2d"),rm=matchMedia("(prefers-reduced-motion:reduce)").matches,
 D=1800,ph=58*Math.PI/180,cX=Math.cos(ph),sX=Math.sin(ph),
-SQ=Math.sqrt(3),CS=[1,.5,-.5,-1,-.5,.5],SN=[0,SQ/2,SQ/2,0,-SQ/2,-SQ/2],LIFT=15,DEPTH=235,
+SQ=Math.sqrt(3),CS=[1,.5,-.5,-1,-.5,.5],SN=[0,SQ/2,SQ/2,0,-SQ/2,-SQ/2],LIFT=14,DEPTH=80,
 TX=new Float32Array(6),TY=new Float32Array(6),GX=new Float32Array(6),GY=new Float32Array(6),EV=[],rnd=(a,b)=>a+Math.random()*(b-a);
-let W,H,R,cx,cy,LW=0,LH=0,n=0,BX,BY,DX,DY,mx=-9999,my=-9999,last=0,minX=0,maxX=0,minY=0,maxY=0;
+let W,H,R,cx,cy,LW=0,LH=0,n=0,BX,BY,DX,DY,LI,mx=-9999,my=-9999,prev=0,minX=0,maxX=0,minY=0,maxY=0;
 
 const spawn=(e,ts,first)=>{
   const a=rnd(0,6.283);
   e.dx=Math.cos(a);e.dy=Math.sin(a);
-  e.ox=rnd(minX*.78,maxX*.78);
-  e.oy=rnd(minY*.78,maxY*.78);
-  e.v=rnd(65,155);
-  e.dur=rnd(2.6,5.8);
-  e.band=rnd(52,145);
-  e.span=rnd(130,360);
-  e.amp=rnd(.55,.95);
+  e.ox=rnd(minX*.75,maxX*.75);
+  e.oy=rnd(minY*.75,maxY*.75);
+  e.v=rnd(85,160);
+  e.dur=rnd(2.5,4.5);
+  e.band=rnd(125,240);
+  e.span=rnd(240,480);
+  e.amp=rnd(.5,.85);
   e.p1=rnd(0,6.28);e.p2=rnd(0,6.28);
-  e.k1=rnd(.007,.016);e.k2=rnd(.012,.024);
-  e.bend=rnd(18,52);
-  e.t0=ts+(first?rnd(-0.7,0.5)*e.dur:rnd(0, 0.2));
+  e.k1=rnd(.004,.010);e.k2=rnd(.006,.014);
+  e.bend=rnd(12,32);
+  e.t0=ts+(first?rnd(-0.75,0.45)*e.dur:rnd(0,0.4));
 };
 
 const build=()=>{const a=[],m=240,nc=Math.ceil(W*2.4/(1.5*R));
@@ -231,125 +226,134 @@ const build=()=>{const a=[],m=240,nc=Math.ceil(W*2.4/(1.5*R));
   }
   a.sort((p,q)=>p[1]-q[1]);n=a.length;
   BX=new Float32Array(n);BY=new Float32Array(n);DX=new Float32Array(n);DY=new Float32Array(n);
+  LI=new Float32Array(n);
   a.forEach((p,k)=>{BX[k]=p[0];BY[k]=p[1]});
   EV.length=0;const t0=rm?3:performance.now()/1000;
-  for(let i=0;i<7;i++){const e={};spawn(e,t0,true);EV.push(e)}
+  for(let i=0;i<6;i++){const e={};spawn(e,t0,true);EV.push(e)}
 };
 
 const size=()=>{const dp=Math.min(devicePixelRatio||1,1.5);W=innerWidth;H=innerHeight;c.width=W*dp;c.height=H*dp;g.setTransform(dp,0,0,dp,0,0);cx=W/2;cy=H*.56;R=W<700?36:46;
   if(W!==LW||Math.abs(H-LH)>160){build();LW=W;LH=H}if(rm)frame(0)};
 
-function frame(now){if(!rm){requestAnimationFrame(frame);if(now-last<33)return;last=now}
-const ts=rm?3:now/1000,on=mx>-9000,hue=206+10*Math.sin(ts*.08),gB=R*.055,act=[];
-for(const e of EV){let el=ts-e.t0;if(el>e.dur&&!rm){spawn(e,ts,false);el=-1}if(el>=0&&el<=e.dur){
-  const u=el/e.dur;
-  e.life=Math.sin(Math.PI*u);
-  e.travel=(u-.5)*e.v*e.dur;
-  act.push(e);
-}}
-g.globalAlpha=1;g.fillStyle="#050811";g.fillRect(0,0,W,H);g.lineJoin="round";
+function frame(now){
+  if(!rm)requestAnimationFrame(frame);
+  const dt=prev?Math.min((now-prev)/1000,.05):.016;
+  prev=now;
+  const kPos=1-Math.exp(-dt*7.5);
+  const kLight=1-Math.exp(-dt*7);
 
-for(let q=0;q<n;q++){const bx=BX[q],by=BY[q];
-  let I=0;
-  for(const e of act){
-    const rx=bx-e.ox,ry=by-e.oy;
-    const perp=ry*e.dx-rx*e.dy;
-    const pNorm=perp/e.span;
-    if(pNorm>-2.3&&pNorm<2.3){
-      const bend=e.bend*Math.sin(perp*e.k1+e.p1+ts*.5);
-      const along=(rx*e.dx+ry*e.dy-e.travel-bend)/e.band;
-      if(along>-2.4&&along<2.4){
-        const env=Math.exp(-(along*along+pNorm*pNorm));
-        const mod=.55+.45*(.5+.5*Math.sin(perp*e.k2+e.p2-ts*.9));
-        I+=e.amp*e.life*env*mod;
+  const ts=rm?3:now/1000,on=mx>-9000,hue=200+6*Math.sin(ts*.2),gB=R*.035,act=[];
+  for(const e of EV){let el=ts-e.t0;if(el>e.dur&&!rm){spawn(e,ts,false);el=-1}if(el>=0&&el<=e.dur){
+    const u=el/e.dur;
+    const s=Math.sin(Math.PI*u);
+    e.life=s*s;
+    e.travel=(u-.5)*e.v*e.dur;
+    act.push(e);
+  }}
+  g.globalAlpha=1;g.fillStyle="#050811";g.fillRect(0,0,W,H);g.lineJoin="round";
+
+  for(let q=0;q<n;q++){const bx=BX[q],by=BY[q];
+    let rawI=0;
+    for(const e of act){
+      const rx=bx-e.ox,ry=by-e.oy;
+      const perp=ry*e.dx-rx*e.dy;
+      const pNorm=perp/e.span;
+      // Расширяем окно отсечки до 3.2, чтобы экспонента затухала практически до нуля без ступеньки
+      if(pNorm>-3.2&&pNorm<3.2){
+        const bend=e.bend*Math.sin(perp*e.k1+e.p1+ts*.22);
+        const along=(rx*e.dx+ry*e.dy-e.travel-bend)/e.band;
+        if(along>-3.2&&along<3.2){
+          const env=Math.exp(-(along*along+pNorm*pNorm));
+          const mod=.78+.22*(.5+.5*Math.sin(perp*e.k2+e.p2-ts*.35));
+          rawI+=e.amp*e.life*env*mod;
+        }
       }
     }
-  }
-  I=I>1?1:I;
+    const targetI=1-Math.exp(-rawI*1.35);
+    LI[q]=rm?targetI:LI[q]+(targetI-LI[q])*kLight;
+    const I=LI[q];
 
-  const push=I*I*(3-2*I);
-  const lift=LIFT*push;
-  const den=D-(by*sX+lift*cX);
-  if(den<D*.3)continue;
-  const s=D/den,sx=cx+bx*s,sy=cy+(by*cX-lift*sX)*s;
-  if(sx<-140||sx>W+140||sy<-190||sy>H+140)continue;
+    const push=I*I*(3-2*I);
+    const lift=LIFT*push;
+    const den=D-(by*sX+lift*cX);
+    if(den<D*.3)continue;
+    const s=D/den,sx=cx+bx*s,sy=cy+(by*cX-lift*sX)*s;
+    if(sx<-140||sx>W+140||sy<-190||sy>H+140)continue;
 
-  /* реакция курсора для всех ячеек */
-  let tx=0,ty=0;if(on){const dx=sx-mx,dy=sy-my,d=Math.hypot(dx,dy);if(d<160&&d>0){const f=(1-d/160)**2*18;tx=dx/d*f;ty=dy/d*f}}
-  DX[q]+=(tx-DX[q])*.12;DY[q]+=(ty-DY[q])*.12;const px=DX[q],py=DY[q];
+    let tx=0,ty=0;if(on){const dx=sx-mx,dy=sy-my,d=Math.hypot(dx,dy);if(d<160&&d>0){const f=(1-d/160)**2*4;tx=dx/d*f;ty=dy/d*f}}
+    DX[q]+=(tx-DX[q])*kPos;DY[q]+=(ty-DY[q])*kPos;const px=DX[q],py=DY[q];
 
-  /* ширина зазора не изменена (та же формула rr) */
-  const rr = R - gB * (1 + .25 * push) * .577;
-  let ty0 = 1e9, byMax = -1e9, mxG = 0, myG = 0;
-  for (let i = 0; i < 6; i++) {
-    const ox = rr * CS[i], oy = rr * SN[i], X = bx + ox, Y = by + oy;
-    let sc = D / (D - (Y * sX - DEPTH * cX));
-    GX[i] = cx + X * sc + px;
-    GY[i] = cy + (Y * cX + DEPTH * sX) * sc + py;
-    sc = D / (D - (Y * sX + lift * cX));
-    TX[i] = cx + X * sc + px;
-    TY[i] = cy + (Y * cX - lift * sX) * sc + py;
-    mxG += GX[i];
-    myG += GY[i];
-    if (TY[i] < ty0) ty0 = TY[i];
-    if (GY[i] > byMax) byMax = GY[i];
-  }
-  mxG /= 6;
-  myG /= 6;
-
-  /* 1. Свет из глубины: формируется у основания/в глубине шахты, а не у верхних граней */
-  if (I > .015) {
-    g.globalAlpha = .85 * I;
-    g.fillStyle = `hsl(${hue} 90% 66%)`;
-    g.beginPath();
-    for (let i = 0; i < 6; i++) {
-      const X = mxG + (GX[i] - mxG) * 1.24;
-      const Y = myG + (GY[i] - myG) * 1.24 + 44 * sX * s;
-      i ? g.lineTo(X, Y) : g.moveTo(X, Y);
+    const rr=R-gB*(1+.25*push)*.577;
+    let ty0=1e9,byMax=-1e9,mxG=0,myG=0;
+    for(let i=0;i<6;i++){
+      const ox=rr*CS[i],oy=rr*SN[i],X=bx+ox,Y=by+oy;
+      let sc=D/(D-(Y*sX-DEPTH*cX));
+      GX[i]=cx+X*sc+px;
+      GY[i]=cy+(Y*cX+DEPTH*sX)*sc+py;
+      sc=D/(D-(Y*sX+lift*cX));
+      TX[i]=cx+X*sc+px;
+      TY[i]=cy+(Y*cX-lift*sX)*sc+py;
+      mxG+=GX[i];myG+=GY[i];
+      if(TY[i]<ty0)ty0=TY[i];
+      if(GY[i]>byMax)byMax=GY[i];
     }
+    mxG/=6;myG/=6;
+
+    /* 1. Свет из глубины (плавное квадратичное затухание к краям волны) */
+    if(I>.001){
+      g.globalAlpha=Math.min(0.95,0.9*I);
+      g.fillStyle=`hsl(${hue} 92% 62%)`;
+      g.beginPath();
+      for(let i=0;i<6;i++){
+        const X=mxG+(GX[i]-mxG)*1.24;
+        const Y=myG+(GY[i]-myG)*1.24+30*sX*s;
+        i?g.lineTo(X,Y):g.moveTo(X,Y);
+      }
+      g.closePath();
+      g.fill();
+      g.globalAlpha=1;
+    }
+
+    /* 2. Боковые стенки (без грубого округления | 0 — без ступенек цвета) */
+    const wallTop=ty0;
+    const wallBot=Math.max(wallTop+20,byMax*0.8+wallTop*0.05);
+    const gr=g.createLinearGradient(0,wallTop,0,wallBot);
+    gr.addColorStop(0,`rgb(${9+21*I}, ${12+61*I}, ${18+119*I})`);
+    gr.addColorStop(0.22,`rgb(${11+50*I}, ${16+146*I}, ${26+240*I})`);
+    gr.addColorStop(1,`rgb(${6+67*I}, ${8+193*I}, ${13+242*I})`);
+    g.fillStyle=gr;
+    g.beginPath();
+    for(let i=0;i<3;i++){
+      const j=i+1;
+      g.moveTo(GX[i],GY[i]);
+      g.lineTo(GX[j],GY[j]);
+      g.lineTo(TX[j],TY[j]);
+      g.lineTo(TX[i],TY[i]);
+      g.closePath();
+    }
+    g.fill();
+
+    /* 3. Крышка ячейки и непрерывный стык без провала на границе */
+    g.fillStyle="rgb(22, 26, 34)";
+    g.beginPath();
+    for(let i=0;i<6;i++)i?g.lineTo(TX[i],TY[i]):g.moveTo(TX[i],TY[i]);
     g.closePath();
     g.fill();
-    g.globalAlpha = 1;
+    if(s>.6){
+      // Плавная интерполяция от базового серого стыка к яркому голубому по S-кривой push
+      const edgeR=175+(70-175)*push;
+      const edgeG=195+(205-195)*push;
+      const edgeB=225+(255-225)*push;
+      const edgeA=0.09+0.36*push;
+      g.strokeStyle=`rgba(${edgeR}, ${edgeG}, ${edgeB}, ${edgeA})`;
+      g.lineWidth=1+0.9*push;
+      g.stroke();
+    }
   }
 
-  /* 2. Боковые стенки: верх у кромки тёмный, свет поднимается снизу из глубины */
-  const wallTop = ty0;
-  const wallBot = Math.max(wallTop + 36, byMax * 0.45 + wallTop * 0.55);
-  const gr = g.createLinearGradient(0, wallTop, 0, wallBot);
-  gr.addColorStop(0, "rgb(9, 12, 18)");
-  gr.addColorStop(0.25, "rgb(11, 16, 26)");
-  gr.addColorStop(1, I > .015
-    ? `rgb(${14 + 38 * I | 0}, ${32 + 95 * I | 0}, ${54 + 165 * I | 0})`
-    : "rgb(6, 8, 13)"
-  );
-  g.fillStyle = gr;
-  g.beginPath();
-  for (let i = 0; i < 3; i++) {
-    const j = i + 1;
-    g.moveTo(GX[i], GY[i]);
-    g.lineTo(GX[j], GY[j]);
-    g.lineTo(TX[j], TY[j]);
-    g.lineTo(TX[i], TY[i]);
-    g.closePath();
-  }
-  g.fill();
-
-  /* 3. Крышка ячейки остаётся тёмной и не светится */
-  g.fillStyle = "rgb(22, 26, 34)";
-  g.beginPath();
-  for (let i = 0; i < 6; i++) i ? g.lineTo(TX[i], TY[i]) : g.moveTo(TX[i], TY[i]);
-  g.closePath();
-  g.fill();
-  if (s > .6) {
-    g.strokeStyle = "rgba(175, 195, 225, .09)";
-    g.lineWidth = 1;
-    g.stroke();
-  }
+  const tf=g.createLinearGradient(0,0,0,H*.4);tf.addColorStop(0,"rgba(5,7,12,.9)");tf.addColorStop(1,"rgba(5,7,12,0)");g.fillStyle=tf;g.fillRect(0,0,W,H*.4);
+  const vg=g.createRadialGradient(W/2,H/2,Math.max(W,H)*.15,W/2,H/2,Math.hypot(W,H)*.55);vg.addColorStop(0,"rgba(4,6,10,0)");vg.addColorStop(1,"rgba(4,6,10,.6)");g.fillStyle=vg;g.fillRect(0,0,W,H);
 }
-
-/* дальний край уходит в тень, виньетка для читаемости текста */
-const tf=g.createLinearGradient(0,0,0,H*.4);tf.addColorStop(0,"rgba(5,7,12,.9)");tf.addColorStop(1,"rgba(5,7,12,0)");g.fillStyle=tf;g.fillRect(0,0,W,H*.4);
-const vg=g.createRadialGradient(W/2,H/2,Math.max(W,H)*.15,W/2,H/2,Math.hypot(W,H)*.55);vg.addColorStop(0,"rgba(4,6,10,0)");vg.addColorStop(1,"rgba(4,6,10,.6)");g.fillStyle=vg;g.fillRect(0,0,W,H)}
 
 addEventListener("resize",size);
 addEventListener("pointermove",e=>{mx=e.clientX;my=e.clientY;if(rm)requestAnimationFrame(frame)},{passive:true});
